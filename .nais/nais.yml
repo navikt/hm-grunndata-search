@@ -1,0 +1,41 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: hm-grunndata-search
+  namespace: teamdigihot
+  labels:
+    team: teamdigihot
+spec:
+  image: {{ image }}
+  port: 8080
+  replicas:
+    min: 1
+    max: 1
+    cpuThresholdPercentage: 50
+  liveness:
+    initialDelay: 20
+    path: /internal/isAlive
+  readiness:
+    initialDelay: 20
+    path: /internal/isReady
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1000Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+  openSearch:
+    access: read
+    instance: grunndata
+  ingresses:
+  {{#each ingress as |url|}}
+     - {{url}}
+  {{/each}}
+  accessPolicy:
+    inbound:
+      rules:
+        - application: hm-grunndata-api
