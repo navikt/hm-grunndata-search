@@ -38,6 +38,18 @@ class SearchService (private val osclient: RestHighLevelClient) {
         }
     }
 
+    fun lookupWithQuery(index:String, params: Map<String, String>?, id: String): String {
+        if (params!=null) require(onlyAllowedParams(params)) { "Disallowed request params present in " + params.keys }
+        return try {
+            val request: Request = newRequest("GET", "/$index/_doc/$id", params, null)
+            val responseEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            EntityUtils.toString(responseEntity)
+        } catch (e: ConnectException) {
+            LOG.error("No connection to Opensearch", e)
+            throw e
+        }
+    }
+
     private fun newRequest(method: String, endpoint: String, params: Map<String, String>?, entity: StringEntity? ): Request {
         val request = Request(method, endpoint)
         params?.forEach(request::addParameter)
