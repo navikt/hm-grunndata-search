@@ -18,6 +18,8 @@ export OPEN_SEARCH_PASSWORD <password>
 
 ```
 http://localhost:8080/product/_search
+http://localhost:8080/supplier/_search
+http://localhost:8080/agreement/_search
 
 ```
 Documentation for how to [query](https://opensearch.org/docs/1.3/opensearch/query-dsl/index/)
