@@ -39,3 +39,6 @@ spec:
     inbound:
       rules:
         - application: hm-grunndata-api
+        - application: hm-oversikt-frontend
+        - application: hm-oversikt-alpha
+
