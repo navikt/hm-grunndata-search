@@ -40,5 +40,5 @@ spec:
       rules:
         - application: hm-grunndata-api
         - application: hm-oversikt-frontend
-        - application: hm-oversikt-alpha
+        - application: hm-oversikt-frontend-alpha
 
