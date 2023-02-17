@@ -62,9 +62,9 @@ class SearchService (private val osclient: RestHighLevelClient) {
         return ALLOWED_REQUEST_PARAMS.containsAll(params.keys)
     }
     companion object {
-        const val PRODUCT = "product"
-        const val AGREEMENT = "agreement"
-        const val SUPPLIER = "supplier"
+        const val PRODUCTS = "products"
+        const val AGREEMENTS = "agreements"
+        const val SUPPLIERS = "suppliers"
         private val LOG = LoggerFactory.getLogger(SearchService::class.java)
         val ALLOWED_REQUEST_PARAMS = setOf("q", "filter_path", "pretty")
     }

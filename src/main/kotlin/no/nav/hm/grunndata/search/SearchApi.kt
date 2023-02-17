@@ -13,39 +13,40 @@ class SearchApi(private val searchService: SearchService) {
         private val LOG = LoggerFactory.getLogger(SearchApi::class.java)
     }
 
-    @Post("/product/_search{?params*}")
+    @Post(uris=["/products/_search{?params*}"])
     fun searchProductWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.PRODUCT, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.PRODUCTS, params, body))
     }
 
-    @Get("/product/_search{?params*}")
+    @Get(uris=["/products/_search{?params*}"])
     fun searchProductWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got get request for product $params")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCT, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCTS, params))
             .header(CACHE_CONTROL, "public, immutable, max-age=3600")
     }
 
-    @Post("/agreement/_search{?params*}")
+
+    @Post(uris=["/agreements/_search{?params*}"])
     fun searchAgreementWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.AGREEMENT, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.AGREEMENTS, params, body))
     }
 
-    @Get("/agreement/_search{?params*}")
+    @Get(uris=["/agreements/_search{?params*}"])
     fun searchAgreementWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got get request for product $params")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.AGREEMENT, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.AGREEMENTS, params))
             .header(CACHE_CONTROL, "public, immutable, max-age=3600")
     }
 
-    @Post("/supplier/_search{?params*}")
+    @Post(uris=["/suppliers/_search{?params*}"])
     fun searchSupplierWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.SUPPLIER, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.SUPPLIERS, params, body))
     }
 
-    @Get("/supplier/_search{?params*}")
+    @Get(uris=["/suppliers/_search{?params*}"])
     fun searchSupplierWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got get request for product $params")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIER, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIERS, params))
             .header(CACHE_CONTROL, "public, immutable, max-age=3600")
     }
 }
