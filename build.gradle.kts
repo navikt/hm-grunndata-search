@@ -37,10 +37,6 @@ dependencies {
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
-
-    // micronaut-data
-    implementation("io.micronaut.data:micronaut-data-jdbc")
-    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
