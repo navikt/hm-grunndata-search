@@ -9,8 +9,8 @@ spec:
   image: {{ image }}
   port: 8080
   replicas:
-    min: 1
-    max: 1
+    min: {{ min_replicas }}
+    max: {{ max_replicas }}
     cpuThresholdPercentage: 50
   liveness:
     initialDelay: 20
@@ -23,8 +23,8 @@ spec:
       cpu: 1000m
       memory: 1000Mi
     requests:
-      cpu: 500m
-      memory: 500Mi
+      cpu: 200m
+      memory: 256Mi
   prometheus:
     enabled: true
     path: /internal/prometheus
