@@ -11,7 +11,7 @@ val logbackClassicVersion = "1.2.11"
 val logbackEncoderVersion = "7.2"
 val mockkVersion = "1.13.2"
 val kotestVersion = "5.5.0"
-val openSearchRestClientVersion = "1.3.5"
+val openSearchRestClientVersion = "2.4.1"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
