@@ -31,13 +31,20 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
             UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password)
         )
         val builder = RestClient.builder(HttpHost.create(openSearchEnv.url))
+            .setRequestConfigCallback { it
+                    .setConnectionRequestTimeout(5000)
+                    .setConnectTimeout(1000)
+                    .setSocketTimeout(20000)
+            }
             .setHttpClientConfigCallback {
                     httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
-                if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.password) {
+                if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.user) {
                     LOG.info("Using dev settings for ${openSearchEnv.url}")
                     devAndTestSettings(httpClientBuilder)
                 }
                 httpClientBuilder
+                    .setMaxConnTotal(256)
+                    .setMaxConnPerRoute(256)
             }
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
         return RestHighLevelClient(builder)
