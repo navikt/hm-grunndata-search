@@ -73,10 +73,12 @@ java {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = jvmTarget
+    kapt.includeCompileClasspath = false
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {
     kotlinOptions.jvmTarget = jvmTarget
+    kapt.includeCompileClasspath = false
 }
 
 tasks.withType<Test> {
@@ -92,7 +94,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.0.1"
 }
 
 repositories {
