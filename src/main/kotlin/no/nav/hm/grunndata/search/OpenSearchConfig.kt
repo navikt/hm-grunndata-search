@@ -43,8 +43,8 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
                     devAndTestSettings(httpClientBuilder)
                 }
                 httpClientBuilder
-                    .setMaxConnTotal(256)
-                    .setMaxConnPerRoute(256)
+                    .setMaxConnTotal(128)
+                    .setMaxConnPerRoute(128)
             }
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
         return RestHighLevelClient(builder)

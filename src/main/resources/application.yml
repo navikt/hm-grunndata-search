@@ -2,6 +2,11 @@ micronaut:
   application:
     name: hm-grunndata-search
     thread-selection: auto
+  netty:
+    event-loops:
+      default:
+        num-threads: 128
+        prefer-native-transport: true
   metrics:
     enabled: true
     binders:
