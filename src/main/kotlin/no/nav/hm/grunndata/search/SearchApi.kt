@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.db.search
+package no.nav.hm.grunndata.search
 
 import io.micronaut.http.HttpHeaders.CACHE_CONTROL
 import io.micronaut.http.HttpResponse

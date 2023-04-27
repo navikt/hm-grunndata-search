@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.db.search
+package no.nav.hm.grunndata.search
 
 import jakarta.inject.Singleton
 import org.apache.http.HttpEntity
