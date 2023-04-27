@@ -44,6 +44,7 @@ dependencies {
     implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    implementation("io.micronaut:micronaut-management")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
