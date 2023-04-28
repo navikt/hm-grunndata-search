@@ -1,4 +1,5 @@
 {
   "min_replicas": 2,
-  "max_replicas": 2
+  "max_replicas": 2,
+  "java_opts":"-Xms256m -Xmx1536m"
 }

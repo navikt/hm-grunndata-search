@@ -20,17 +20,19 @@ spec:
     path: /internal/isReady
   resources:
     limits:
-      cpu: 1000m
-      memory: 1000Mi
+      memory: 2048Mi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 128Mi
   prometheus:
     enabled: true
     path: /internal/prometheus
   openSearch:
     access: read
     instance: grunndata
+  env:
+    - name: JAVA_OPTS
+      value: "{{java_opts}}"
   ingresses:
   {{#each ingress as |url|}}
      - {{url}}
