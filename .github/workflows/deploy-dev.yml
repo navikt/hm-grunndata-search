@@ -18,6 +18,7 @@ jobs:
       SNYK_ENABLED: true
       SNYK_ORG: "hjelpemiddelbehov"
       TEAM: "teamdigihot"
+      CODEQL_ENABLED: true
     secrets:
       NAIS_DEPLOY_APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
