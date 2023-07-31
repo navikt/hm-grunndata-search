@@ -38,6 +38,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
