@@ -23,7 +23,7 @@ class SearchApi(private val searchService: SearchService) {
     fun searchProductWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for product")
         return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCTS, params))
-            .header(CACHE_CONTROL, "public, immutable, max-age=3600")
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
 
@@ -37,7 +37,7 @@ class SearchApi(private val searchService: SearchService) {
     fun searchAgreementWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for agreement")
         return HttpResponse.ok(searchService.searchWithQuery(SearchService.AGREEMENTS, params))
-            .header(CACHE_CONTROL, "public, immutable, max-age=3600")
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
     @Post(uris=["/suppliers/_search{?params*}"])
@@ -50,6 +50,6 @@ class SearchApi(private val searchService: SearchService) {
     fun searchSupplierWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for supplier")
         return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIERS, params))
-            .header(CACHE_CONTROL, "public, immutable, max-age=3600")
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 }
