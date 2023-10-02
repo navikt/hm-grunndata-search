@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.0.5"
+val micronautVersion="4.1.0"
 val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
@@ -21,7 +21,7 @@ plugins {
     kotlin("kapt") version "1.8.22"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.0.2"
+    id("io.micronaut.application") version "4.1.0"
 }
 
 configurations.all {
