@@ -24,23 +24,31 @@ class ProductGraphQLFetchers(
     private fun productFetcher(args: DataFetchingEnvironment): Product? {
         val hmsnr: String = args.getArgument<String?>("hmsnr") ?: ""
         val res = runCatching {
-            searchService.lookupWithQuery(SearchService.PRODUCTS, null, hmsnr)
+            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrSearchQuery(hmsnr))
         }.onFailure { e ->
             LOG.error("Exception while searching for products", e)
         }.getOrNull()
         LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
-        return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.result
+        return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.firstOrNull()?.source
     }
 }
 
+private val hmsnrSearchQuery = { hmsnr: String ->
+    checkNotNull(hmsnr.toIntOrNull()) { "Hmsnr ikke gyldig: $hmsnr" }
+    """{"query": {"match": {"hmsArtNr": "$hmsnr"}}}"""
+}
+
 data class OpenSearchResponse (
-    val found: Boolean,
+    val hits: OpenSearchResponseHits,
+)
 
-    @JsonAlias("_index")
-    val index: String,
+data class OpenSearchResponseHits (
+    val hits: List<OpenSearchResponseHit>,
+)
 
+data class OpenSearchResponseHit (
     @JsonAlias("_source")
-    val result: Product?,
+    val source: Product,
 )
 
 @Introspected
