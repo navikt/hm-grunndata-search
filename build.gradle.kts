@@ -35,6 +35,7 @@ dependencies {
     api("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
     runtimeOnly("org.yaml:snakeyaml")
     implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
@@ -48,6 +49,8 @@ dependencies {
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
     implementation("io.micronaut:micronaut-management")
+
+    implementation("io.micronaut.graphql:micronaut-graphql")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
