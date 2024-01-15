@@ -31,7 +31,7 @@ class ProductGraphQLFetchers(
         }.onFailure { e ->
             LOG.error("Exception while searching for products", e)
         }.getOrNull()
-        LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
+        // LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
         return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.firstOrNull()?.source
     }
 }
@@ -110,24 +110,35 @@ data class AttributesDoc (
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
     val tenderId: String? = null,
-    val hasTender: Boolean? = null
+    val hasTender: Boolean? = null,
 )
 
 @Introspected
 data class MediaDoc (
-    val uri:    String,
+    val uri: String,
     val priority: Int = 1,
     val type: MediaType = MediaType.IMAGE,
-    val text:   String?=null,
-    val source: MediaSourceType = MediaSourceType.HMDB
+    val text: String?=null,
+    val source: MediaSourceType = MediaSourceType.HMDB,
 )
 
 @Introspected
-data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?, val setebreddeMinCM: Int?,
-                           val brukervektMinKG: Int?, val materialeTrekk:String?, val setedybdeMinCM:Int?,
-                           val setedybdeMaksCM: Int?, val setehoydeMaksCM:Int?, val setehoydeMinCM: Int?,
-                           val totalVektKG: Int?, val lengdeCM: Int?, val breddeCM: Int?, val beregnetBarn: String?,
-                           val brukervektMaksKG: Int?)
+data class TechDataFilters (
+    val fyllmateriale: String?,
+    val setebreddeMaksCM: Int?,
+    val setebreddeMinCM: Int?,
+    val brukervektMinKG: Int?,
+    val materialeTrekk: String?,
+    val setedybdeMinCM: Int?,
+    val setedybdeMaksCM: Int?,
+    val setehoydeMaksCM: Int?,
+    val setehoydeMinCM: Int?,
+    val totalVektKG: Int?,
+    val lengdeCM: Int?,
+    val breddeCM: Int?,
+    val beregnetBarn: String?,
+    val brukervektMaksKG: Int?,
+)
 
 @Introspected
 data class ProductSupplier(
@@ -141,7 +152,7 @@ enum class ProductStatus {
     ACTIVE,
     @JsonEnumDefaultValue
     INACTIVE,
-    DELETED
+    DELETED,
 }
 
 @Introspected
@@ -151,7 +162,7 @@ enum class MediaSourceType {
     EXTERNALURL,
     IMPORT,
     @JsonEnumDefaultValue
-    UNKNOWN
+    UNKNOWN,
 }
 
 @Introspected
@@ -161,15 +172,17 @@ enum class MediaType {
     VIDEO,
     XLS,
     @JsonEnumDefaultValue
-    OTHER
+    OTHER,
 }
 
 @Introspected
 data class TechData (
     val key:    String,
     val value:  String,
-    val unit:   String
+    val unit:   String,
 )
 
 @Introspected
-data class CompatibleWith (val seriesIds: Set<UUID> = emptySet())
+data class CompatibleWith (
+    val seriesIds: Set<UUID> = emptySet(),
+)
