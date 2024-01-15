@@ -1,5 +1,6 @@
 type Query {
-    product(hmsnr: String): Product
+    product(hmsnr: String!): Product
+    products(hmsnrs: [String!]!): [Product]
 }
 
 type Product {

@@ -22,8 +22,10 @@ class ProductGraphQLFetchers(
     fun fetchers(): Map<String, DataFetcher<*>> {
         return mapOf(
             "product" to fetcher { productFetcher(it) },
+            "products" to fetcher { productsFetcher(it) },
         )
     }
+
     private fun productFetcher(args: DataFetchingEnvironment): Product? {
         val hmsnr: String = args.getArgument<String?>("hmsnr") ?: ""
         val res = runCatching {
@@ -34,11 +36,30 @@ class ProductGraphQLFetchers(
         // LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
         return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.firstOrNull()?.source
     }
+
+    private fun productsFetcher(args: DataFetchingEnvironment): List<Product> {
+        val hmsnrs: List<String> = args.getArgumentAs("hmsnrs") ?: return emptyList()
+        val res = runCatching {
+            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrsSearchQuery(hmsnrs))
+        }.onFailure { e ->
+            LOG.error("Exception while searching for products", e)
+        }.getOrNull()
+        LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
+        return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.map { it.source } ?: emptyList()
+    }
 }
 
 private val hmsnrSearchQuery = { hmsnr: String ->
     checkNotNull(hmsnr.toIntOrNull()) { "Hmsnr ikke gyldig: $hmsnr" }
     """{"query": {"match": {"hmsArtNr": "$hmsnr"}}}"""
+}
+
+private val hmsnrsSearchQuery = { hmsnrs: List<String> ->
+    val hmsnrsSet = hmsnrs.toSet()
+    hmsnrsSet.forEach { hmsnr ->
+        checkNotNull(hmsnr.toIntOrNull()) { "Hmsnr ikke gyldig: $hmsnr" }
+    }
+    """{"query": {"terms": {"hmsArtNr": [${hmsnrsSet.joinToString { """"$it"""" }}]}}}"""
 }
 
 data class OpenSearchResponse (
