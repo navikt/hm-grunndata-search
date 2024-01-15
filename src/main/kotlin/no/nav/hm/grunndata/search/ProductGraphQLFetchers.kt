@@ -21,20 +21,8 @@ class ProductGraphQLFetchers(
 ) {
     fun fetchers(): Map<String, DataFetcher<*>> {
         return mapOf(
-            "product" to fetcher { productFetcher(it) },
             "products" to fetcher { productsFetcher(it) },
         )
-    }
-
-    private fun productFetcher(args: DataFetchingEnvironment): Product? {
-        val hmsnr: String = args.getArgument<String?>("hmsnr") ?: ""
-        val res = runCatching {
-            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrSearchQuery(hmsnr))
-        }.onFailure { e ->
-            LOG.error("Exception while searching for products", e)
-        }.getOrNull()
-        // LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
-        return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.firstOrNull()?.source
     }
 
     private fun productsFetcher(args: DataFetchingEnvironment): List<Product> {
@@ -42,16 +30,12 @@ class ProductGraphQLFetchers(
         val res = runCatching {
             searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrsSearchQuery(hmsnrs))
         }.onFailure { e ->
-            LOG.error("Exception while searching for products", e)
-        }.getOrNull()
-        LOG.info("Resultat: ${objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(res))}")
-        return res?.let { objectMapper.readValue<OpenSearchResponse>(it) }?.hits?.hits?.map { it.source } ?: emptyList()
+            LOG.error("Exception caught and ignored while searching for products (graphql)", e)
+        }.onSuccess {
+            // LOG.info("Resultat: ${objectMapper.prettyString(it)}")
+        }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it) } ?: OpenSearchResponse.empty()
+        return res.hits.hits.map { it.product }
     }
-}
-
-private val hmsnrSearchQuery = { hmsnr: String ->
-    checkNotNull(hmsnr.toIntOrNull()) { "Hmsnr ikke gyldig: $hmsnr" }
-    """{"query": {"match": {"hmsArtNr": "$hmsnr"}}}"""
 }
 
 private val hmsnrsSearchQuery = { hmsnrs: List<String> ->
@@ -64,7 +48,11 @@ private val hmsnrsSearchQuery = { hmsnrs: List<String> ->
 
 data class OpenSearchResponse (
     val hits: OpenSearchResponseHits,
-)
+) {
+    companion object {
+        fun empty() = OpenSearchResponse(hits = OpenSearchResponseHits(hits = emptyList()))
+    }
+}
 
 data class OpenSearchResponseHits (
     val hits: List<OpenSearchResponseHit>,
@@ -72,7 +60,7 @@ data class OpenSearchResponseHits (
 
 data class OpenSearchResponseHit (
     @JsonAlias("_source")
-    val source: Product,
+    val product: Product,
 )
 
 @Introspected

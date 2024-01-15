@@ -79,6 +79,8 @@ val objectConverter: ObjectMapper = jacksonObjectMapper()
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 
+fun ObjectMapper.prettyString(s: String?) = writerWithDefaultPrettyPrinter().writeValueAsString(readTree(s))
+
 inline fun <T: DataFetchingEnvironment, reified R> T.getArgumentAs(arg: String): R? {
     return arguments[arg]?.let { objectConverter.convertValue<R>(it) }
 }

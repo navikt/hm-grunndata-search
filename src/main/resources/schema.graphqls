@@ -1,5 +1,4 @@
 type Query {
-    product(hmsnr: String!): Product
     products(hmsnrs: [String!]!): [Product]
 }
 
