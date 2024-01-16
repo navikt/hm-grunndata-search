@@ -1,5 +1,5 @@
 type Query {
-    products(hmsnrs: [String!]!): [Product]
+    products(hmsnrs: [String!]!): [Product!]!
 }
 
 type Product {
@@ -19,8 +19,8 @@ type Product {
     accessory: Boolean!
     sparePart: Boolean!
     seriesId: String
-    data: [TechData]!
-    media: [MediaDoc]!
+    data: [TechData!]!
+    media: [MediaDoc!]!
     created: String!
     updated: String!
     expired: String!
@@ -28,7 +28,7 @@ type Product {
     updatedBy: String!
     filters: TechDataFilters!
     agreementInfo: AgreementInfoDoc
-    agreements: [AgreementInfoDoc]!
+    agreements: [AgreementInfoDoc!]!
     hasAgreement: Boolean!
 }
 
@@ -48,7 +48,7 @@ type AgreementInfoDoc {
 type AttributesDoc {
     manufacturer: String
     compatibleWith: CompatibleWith
-    keywords: [String]
+    keywords: [String!]
     series: String
     shortdescription: String
     text: String
@@ -118,5 +118,5 @@ type TechData {
 }
 
 type CompatibleWith {
-    seriesIds: [String]!
+    seriesIds: [String!]!
 }
