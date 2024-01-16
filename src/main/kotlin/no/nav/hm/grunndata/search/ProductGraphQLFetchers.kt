@@ -32,7 +32,7 @@ class ProductGraphQLFetchers(
         }.onFailure { e ->
             LOG.error("Exception caught and ignored while searching for products (graphql)", e)
         }.onSuccess {
-            // LOG.info("Resultat: ${objectMapper.prettyString(it)}")
+            // LOG.info("Resultat: ${objectMapper.prettifyJson(it)}")
         }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it) } ?: OpenSearchResponse.empty()
         return res.hits.hits.map { it.product }
     }
