@@ -92,7 +92,15 @@ data class Product (
     val agreementInfo: AgreementInfoDoc?,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
-)
+) {
+    fun tekniskeDataSomTekst(): String = data.joinToString { it.toString() }
+
+    // fun artikkelUrl(): String =
+    //     "https://www.hjelpemiddeldatabasen.no/r11x.asp?linkinfo=${this.produktId}&art0=${this.artikkelId}&nart=1"
+
+    // fun produktUrl(): String =
+    //     "https://www.hjelpemiddeldatabasen.no/r11x.asp?linkinfo=${this.produktId}"
+}
 
 @Introspected
 data class AgreementInfoDoc (
@@ -118,6 +126,10 @@ data class AttributesDoc (
     val text: String? = null,
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
+    val digitalSoknad: Boolean? = null,
+    val ikkeTilInstitusjon: Boolean? = null,
+    val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
+    val produkttype: Produkttype? = null,
     val tenderId: String? = null,
     val hasTender: Boolean? = null,
 )
@@ -185,11 +197,27 @@ enum class MediaType {
 }
 
 @Introspected
+enum class Produkttype {
+    Hovedprodukt,
+    Tilbehoer,
+    Del,
+}
+
+@Introspected
+data class PakrevdGodkjenningskurs (
+    val tittel: String,
+    val isokode: String,
+    val kursId: Int,
+)
+
+@Introspected
 data class TechData (
     val key:    String,
     val value:  String,
     val unit:   String,
-)
+) {
+    override fun toString(): String = "$key ${value}${unit}".trim()
+}
 
 @Introspected
 data class CompatibleWith (

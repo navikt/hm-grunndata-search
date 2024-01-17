@@ -30,6 +30,8 @@ type Product {
     agreementInfo: AgreementInfoDoc
     agreements: [AgreementInfoDoc!]!
     hasAgreement: Boolean!
+
+    tekniskeDataSomTekst: String!
 }
 
 type AgreementInfoDoc {
@@ -54,6 +56,10 @@ type AttributesDoc {
     text: String
     url: String
     bestillingsordning: Boolean
+    digitalSoknad: Boolean
+    ikkeTilInstitusjon: Boolean
+    pakrevdGodkjenningskurs: PakrevdGodkjenningskurs
+    produkttype: Produkttype
     tenderId: String
     hasTender: Boolean
 }
@@ -109,6 +115,18 @@ enum MediaType {
     VIDEO,
     XLS,
     OTHER
+}
+
+enum Produkttype {
+    Hovedprodukt,
+    Tilbehoer,
+    Del
+}
+
+type PakrevdGodkjenningskurs {
+    tittel: String!
+    isokode: String!
+    kursId: Int!
 }
 
 type TechData {
