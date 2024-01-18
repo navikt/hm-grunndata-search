@@ -44,7 +44,7 @@ jackson:
 graphql:
   enabled: true
   graphiql: # enables the /graphiql endpoint to test calls against your graph.
-    enabled: true # TODO: remove again!? Dev-only?
+    enabled: ${GRAPHQL_GRAPHIQL_ENABLE:false}
 
 opensearch:
   password: ${OPEN_SEARCH_PASSWORD:admin}
