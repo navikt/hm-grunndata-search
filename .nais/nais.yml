@@ -33,6 +33,10 @@ spec:
   env:
     - name: JAVA_OPTS
       value: "{{java_opts}}"
+  {{#each env}}
+    - name: {{@key}}
+      value: "{{this}}"
+  {{/each}}
   ingresses:
   {{#each ingress as |url|}}
      - {{url}}

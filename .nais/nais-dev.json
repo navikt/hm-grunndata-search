@@ -1,5 +1,8 @@
 {
   "min_replicas": 1,
   "max_replicas": 1,
-  "java_opts":"-Xms128m -Xmx512m"
+  "java_opts": "-Xms128m -Xmx512m",
+  "env": {
+    "GRAPHQL_GRAPHIQL_ENABLE": "true"
+  }
 }
