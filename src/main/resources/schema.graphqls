@@ -1,0 +1,141 @@
+type Query {
+    products(hmsnrs: [String!]!): [Product!]!
+}
+
+type Product {
+    id: String!
+    supplier: ProductSupplier!
+    title: String!
+    articleName: String!
+    attributes: AttributesDoc!
+    status: ProductStatus!
+    hmsArtNr: String
+    identifier: String!
+    supplierRef: String!
+    isoCategory: String!
+    isoCategoryTitle: String
+    isoCategoryText: String
+    isoCategoryTextShort: String
+    accessory: Boolean!
+    sparePart: Boolean!
+    seriesId: String
+    data: [TechData!]!
+    media: [MediaDoc!]!
+    created: String!
+    updated: String!
+    expired: String!
+    createdBy: String!
+    updatedBy: String!
+    filters: TechDataFilters!
+    agreements: [AgreementInfoDoc!]!
+    hasAgreement: Boolean!
+
+    dataAsText: String!
+    productURL: String!
+    productVariantURL: String!
+}
+
+type AgreementInfoDoc {
+    id: String!
+    identifier: String
+    title: String
+    label: String!
+    rank: Int!
+    postNr: Int!
+    postIdentifier: String
+    postTitle: String
+    reference: String!
+    expired: String!
+}
+
+type AttributesDoc {
+    manufacturer: String
+    compatibleWith: CompatibleWith
+    keywords: [String!]
+    series: String
+    shortdescription: String
+    text: String
+    url: String
+    bestillingsordning: Boolean
+    digitalSoknad: Boolean
+    ikkeTilInstitusjon: Boolean
+    pakrevdGodkjenningskurs: PakrevdGodkjenningskurs
+    produkttype: Produkttype
+    tenderId: String
+    hasTender: Boolean
+}
+
+type MediaDoc {
+    uri: String!
+    priority: Int!,
+    type: MediaType!,
+    text: String,
+    source: MediaSourceType!
+}
+
+type TechDataFilters {
+    fyllmateriale: String
+    setebreddeMaksCM: Int
+    setebreddeMinCM: Int
+    brukervektMinKG: Int
+    materialeTrekk: String
+    setedybdeMinCM: Int
+    setedybdeMaksCM: Int
+    setehoydeMaksCM: Int
+    setehoydeMinCM: Int
+    totalVektKG: Int
+    lengdeCM: Int
+    breddeCM: Int
+    beregnetBarn: String
+    brukervektMaksKG: Int
+}
+
+type ProductSupplier {
+    id: String!
+    identifier: String!
+    name: String!
+}
+
+enum ProductStatus {
+    ACTIVE,
+    INACTIVE,
+    DELETED
+}
+
+enum MediaSourceType {
+    HMDB,
+    REGISTER,
+    EXTERNALURL,
+    IMPORT,
+    UNKNOWN
+}
+
+enum MediaType {
+    PDF,
+    IMAGE,
+    VIDEO,
+    XLS,
+    OTHER
+}
+
+enum Produkttype {
+    Hovedprodukt,
+    Tilbehoer,
+    Del
+}
+
+type PakrevdGodkjenningskurs {
+    tittel: String!
+    isokode: String!
+    kursId: Int!
+}
+
+type TechData {
+    key: String!
+    value: String!
+    unit: String!
+}
+
+type CompatibleWith {
+    seriesIds: [String!]!
+}

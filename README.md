@@ -9,6 +9,7 @@ Search api for Grunndata.
 export OPEN_SEARCH_URI <url to opensearch in dev>
 export OPEN_SEARCH_USERNAME <username>
 export OPEN_SEARCH_PASSWORD <password>
+export GRAPHQL_GRAPHIQL_ENABLE=true # If you want graphiql (http://localhost:8080/graphiql/ -interface)
 
 ./gradlew run
 

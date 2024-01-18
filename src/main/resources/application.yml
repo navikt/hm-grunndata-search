@@ -7,6 +7,8 @@ micronaut:
       default:
         num-threads: 128
         prefer-native-transport: true
+  server:
+    port: ${SERVER_PORT:8080}
   metrics:
     enabled: true
     binders:
@@ -38,6 +40,11 @@ jackson:
   bean-introspection-module: true
   serialization:
     indentOutput: true
+
+graphql:
+  enabled: true
+  graphiql: # enables the /graphiql endpoint to test calls against your graph.
+    enabled: ${GRAPHQL_GRAPHIQL_ENABLE:false}
 
 opensearch:
   password: ${OPEN_SEARCH_PASSWORD:admin}
