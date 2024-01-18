@@ -93,13 +93,14 @@ data class Product (
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
 ) {
-    fun tekniskeDataSomTekst(): String = data.joinToString { it.toString() }
+    fun dataAsText(): String = data.joinToString { it.toString() }
 
-    // fun artikkelUrl(): String =
-    //     "https://www.hjelpemiddeldatabasen.no/r11x.asp?linkinfo=${this.produktId}&art0=${this.artikkelId}&nart=1"
+    fun productURL(): String =
+        "https://finnhjelpemiddel.nav.no/produkt/${this.seriesId}"
 
-    // fun produktUrl(): String =
-    //     "https://www.hjelpemiddeldatabasen.no/r11x.asp?linkinfo=${this.produktId}"
+    // TODO: Fix url when a product variant page is available
+    fun productVariantURL(): String =
+        "https://finnhjelpemiddel.nav.no/produkt/${this.seriesId}"
 }
 
 @Introspected

@@ -31,7 +31,9 @@ type Product {
     agreements: [AgreementInfoDoc!]!
     hasAgreement: Boolean!
 
-    tekniskeDataSomTekst: String!
+    dataAsText: String!
+    productURL: String!
+    productVariantURL: String!
 }
 
 type AgreementInfoDoc {
