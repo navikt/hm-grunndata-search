@@ -89,7 +89,6 @@ data class Product (
     val createdBy: String,
     val updatedBy: String,
     val filters: TechDataFilters,
-    val agreementInfo: AgreementInfoDoc?,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
 ) {

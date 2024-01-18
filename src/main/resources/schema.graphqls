@@ -27,7 +27,6 @@ type Product {
     createdBy: String!
     updatedBy: String!
     filters: TechDataFilters!
-    agreementInfo: AgreementInfoDoc
     agreements: [AgreementInfoDoc!]!
     hasAgreement: Boolean!
 
