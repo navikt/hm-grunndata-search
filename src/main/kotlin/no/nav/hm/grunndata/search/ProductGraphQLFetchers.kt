@@ -127,7 +127,6 @@ data class AttributesDoc (
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
     val digitalSoknad: Boolean? = null,
-    val ikkeTilInstitusjon: Boolean? = null,
     val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,

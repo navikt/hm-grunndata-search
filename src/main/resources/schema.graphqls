@@ -58,7 +58,6 @@ type AttributesDoc {
     url: String
     bestillingsordning: Boolean
     digitalSoknad: Boolean
-    ikkeTilInstitusjon: Boolean
     pakrevdGodkjenningskurs: PakrevdGodkjenningskurs
     produkttype: Produkttype
     tenderId: String
