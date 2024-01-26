@@ -1,4 +1,5 @@
 type Query {
+    # Get products by hmsArtNr (max 500 results)
     products(hmsnrs: [String!]!): [Product!]!
 }
 

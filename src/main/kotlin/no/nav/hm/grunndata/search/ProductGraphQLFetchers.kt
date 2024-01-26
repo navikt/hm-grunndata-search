@@ -27,8 +27,11 @@ class ProductGraphQLFetchers(
 
     private fun productsFetcher(args: DataFetchingEnvironment): List<Product> {
         val hmsnrs: List<String> = args.getArgumentAs("hmsnrs") ?: return emptyList()
+        val hmsnrsSet = hmsnrs.toSet()
+        require(hmsnrsSet.count() <= maxNumberOfResults) { "too many hmsnrs in request (max=$maxNumberOfResults)" }
+
         val res = runCatching {
-            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrsSearchQuery(hmsnrs))
+            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrsSearchQuery(hmsnrsSet))
         }.onFailure { e ->
             LOG.error("Exception caught and ignored while searching for products (graphql)", e)
         }.onSuccess {
@@ -38,12 +41,12 @@ class ProductGraphQLFetchers(
     }
 }
 
-private val hmsnrsSearchQuery = { hmsnrs: List<String> ->
-    val hmsnrsSet = hmsnrs.toSet()
-    hmsnrsSet.forEach { hmsnr ->
+private val maxNumberOfResults: Int = 500
+private val hmsnrsSearchQuery = { hmsnrs: Set<String> ->
+    hmsnrs.forEach { hmsnr ->
         checkNotNull(hmsnr.toIntOrNull()) { "Hmsnr ikke gyldig: $hmsnr" }
     }
-    """{"query": {"terms": {"hmsArtNr": [${hmsnrsSet.joinToString { """"$it"""" }}]}}}"""
+    """{"query": {"terms": {"hmsArtNr": [${hmsnrs.joinToString { """"$it"""" }}]}}, "size": $maxNumberOfResults}"""
 }
 
 data class OpenSearchResponse (
