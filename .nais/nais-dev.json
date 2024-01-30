@@ -4,5 +4,8 @@
   "java_opts": "-Xms128m -Xmx512m",
   "env": {
     "GRAPHQL_GRAPHIQL_ENABLE": "true"
-  }
+  },
+  "ingress": [
+    "https://hm-grunndata-search.intern.dev.nav.no"
+  ]
 }
