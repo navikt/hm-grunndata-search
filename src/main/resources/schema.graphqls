@@ -15,6 +15,7 @@ type Product {
     supplierRef: String!
     isoCategory: String!
     isoCategoryTitle: String
+    isoCategoryTitleShort: String
     isoCategoryText: String
     isoCategoryTextShort: String
     accessory: Boolean!

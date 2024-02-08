@@ -79,6 +79,7 @@ data class Product (
     val supplierRef: String,
     val isoCategory: String,
     val isoCategoryTitle: String?,
+    val isoCategoryTitleShort: String?,
     val isoCategoryText: String?,
     val isoCategoryTextShort: String?,
     val accessory: Boolean = false,
