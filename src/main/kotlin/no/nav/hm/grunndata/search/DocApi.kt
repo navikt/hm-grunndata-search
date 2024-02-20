@@ -33,4 +33,11 @@ class DocApi(private val searchService: SearchService) {
         return HttpResponse.ok(searchService.lookupWithQuery(SearchService.SUPPLIERS, params,id))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
+
+    @Get(uris=["/news/_doc/{id}{?params*}"])
+    fun searchNewsWithQuery(params: Map<String, String>?, id:String): HttpResponse<String> {
+        LOG.info("Got lookup request for news $id")
+        return HttpResponse.ok(searchService.lookupWithQuery(SearchService.NEWS, params,id))
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
+    }
 }

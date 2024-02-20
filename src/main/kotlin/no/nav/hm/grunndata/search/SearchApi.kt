@@ -52,4 +52,17 @@ class SearchApi(private val searchService: SearchService) {
         return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIERS, params))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
+
+    @Post(uris=["/news/_search{?params*}"])
+    fun searchNewsWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
+        LOG.info("Got body request for news")
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.NEWS, params, body))
+    }
+
+    @Get(uris=["/news/_search{?params*}"])
+    fun searchNewsWithQuery(params: Map<String, String>?): HttpResponse<String> {
+        LOG.info("Got query request for news")
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.NEWS, params))
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
+    }
 }
