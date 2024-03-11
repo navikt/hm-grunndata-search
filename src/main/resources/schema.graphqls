@@ -46,6 +46,7 @@ type AgreementInfoDoc {
     postNr: Int!
     postIdentifier: String
     postTitle: String
+    postId: String
     reference: String!
     expired: String!
 }
@@ -60,6 +61,7 @@ type AttributesDoc {
     url: String
     bestillingsordning: Boolean
     digitalSoknad: Boolean
+    sortimentKategori: String
     pakrevdGodkjenningskurs: PakrevdGodkjenningskurs
     produkttype: Produkttype
     tenderId: String
