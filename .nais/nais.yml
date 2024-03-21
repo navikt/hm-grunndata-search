@@ -45,7 +45,6 @@ spec:
     inbound:
       rules:
         - application: hm-bestillingsordning-river
-        - application: hm-bestillingsordning-sjekker
         - application: hm-grunndata-api
         - application: hm-kommune-api
         - application: hm-oversikt-frontend
@@ -53,6 +52,7 @@ spec:
         - application: hm-oebs-api-proxy
         - application: hm-saksbehandling
         - application: hm-soknad
+        - application: hm-soknad-api
         - application: hm-soknadsbehandling
         - application: hm-soknadsbehandling-db
         - application: hm-sortiment
