@@ -1,6 +1,7 @@
 type Query {
     # Get products by hmsArtNr (max 500 results)
     products(hmsnrs: [String!]!): [Product!]!
+    bestillingsordning(hmsnrs: [String!]!): [Bestillingsordning!]!
 }
 
 type Product {
@@ -141,4 +142,9 @@ type TechData {
 
 type CompatibleWith {
     seriesIds: [String!]!
+}
+
+type Bestillingsordning {
+    hmsnr: String!
+    bestillingsordning: Boolean!
 }

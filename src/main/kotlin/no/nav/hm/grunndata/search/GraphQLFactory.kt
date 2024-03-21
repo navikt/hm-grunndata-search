@@ -30,6 +30,7 @@ class GraphQLFactory {
     fun graphQL(
         resourceResolver: ResourceResolver,
         productGraphQLFetchers: ProductGraphQLFetchers,
+        bestillingsordningGraphQLFetchers: BestillingsordningGraphQLFetchers,
     ): GraphQL {
         val schemaParser = SchemaParser()
         val schemaGenerator = SchemaGenerator()
@@ -43,6 +44,7 @@ class GraphQLFactory {
         val runtimeWiring = RuntimeWiring.newRuntimeWiring()
             .type("Query") { typeWiring -> typeWiring
                 .dataFetchers(productGraphQLFetchers.fetchers())
+                .dataFetchers(bestillingsordningGraphQLFetchers.fetchers())
             }
             .build()
 

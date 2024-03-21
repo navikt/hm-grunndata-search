@@ -27,6 +27,10 @@ micronaut:
         enabled: true
         step: PT1M
         descriptions: true
+
+digihotSortiment:
+  bestillingsordning: ${BESTILLINGSORDNING_URL:`https://navikt.github.io/digihot-sortiment/bestillingsordning_sortiment.json`}
+
 endpoints:
   metrics:
     enabled: true

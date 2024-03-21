@@ -5,10 +5,8 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import org.slf4j.LoggerFactory
 
-
 @Controller
 class SearchApi(private val searchService: SearchService) {
-
     companion object {
         private val LOG = LoggerFactory.getLogger(SearchApi::class.java)
     }
@@ -25,7 +23,6 @@ class SearchApi(private val searchService: SearchService) {
         return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCTS, params))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
-
 
     @Post(uris=["/agreements/_search{?params*}"])
     fun searchAgreementWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
