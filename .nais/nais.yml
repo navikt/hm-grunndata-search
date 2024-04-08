@@ -60,3 +60,4 @@ spec:
         - application: hm-soknadsbehandling-db
         - application: hm-sortiment
         - application: hotsak-frontend
+        - application: hm-forslagsmotor-tilbehoer
