@@ -50,6 +50,18 @@ class SearchService (private val osclient: RestHighLevelClient) {
         }
     }
 
+    fun sqlQuery(params: Map<String, String>?, query: String): String {
+        return try {
+            val entity = StringEntity(query, ContentType.APPLICATION_JSON)
+            val request: Request = newRequest("POST", "/_plugins/_sql", params, entity)
+            val responseEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            EntityUtils.toString(responseEntity)
+        } catch (e: ConnectException) {
+            LOG.error("No connection to Opensearch", e)
+            throw e
+        }
+    }
+
     private fun newRequest(method: String, endpoint: String, params: Map<String, String>?, entity: StringEntity? ): Request {
         val request = Request(method, endpoint)
         params?.forEach(request::addParameter)
@@ -69,4 +81,6 @@ class SearchService (private val osclient: RestHighLevelClient) {
         private val LOG = LoggerFactory.getLogger(SearchService::class.java)
         val ALLOWED_REQUEST_PARAMS = setOf("q", "filter_path", "pretty")
     }
+
+
 }
