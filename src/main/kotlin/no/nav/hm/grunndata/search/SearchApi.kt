@@ -88,17 +88,17 @@ class SearchApi(
             val hits: OSResponseHits?,
         )
         data class Response(
-            val from: Int,
-            val size: Int,
+            val offset: Int,
+            val limit: Int,
             val total: Int,
             val results: List<JsonNode>,
         )
 
         val since = params["since"]?.let { LocalDate.parse(it) } ?: LocalDate.now().minusDays(1)
-        val from = params["from"]?.toIntOrNull() ?: 0
-        val size = params["size"]?.toIntOrNull() ?: 1000
+        val offset = params["offset"]?.toIntOrNull() ?: 0
+        val limit = params["limit"]?.toIntOrNull() ?: 1000
 
-        LOG.info("Got request for external_products (start=$since, from=$from, size=$size)")
+        LOG.info("Got request for external_products (since=$since, offset=$offset, limit=$limit)")
 
         val query = """
             {
@@ -117,15 +117,15 @@ class SearchApi(
                         }
                     }
                 ],
-                "from": $from,
-                "size": $size
+                "from": $offset,
+                "size": $limit
             }
         """.trimIndent()
 
         val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query))
         return HttpResponse.ok(objectMapper.writeValueAsString(Response(
-            from = from,
-            size = size,
+            offset = offset,
+            limit = limit,
             total = results.hits?.total?.value ?: 0,
             results = results.hits?.hits?.map { it.externalProduct } ?: listOf(),
         )))
