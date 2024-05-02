@@ -104,32 +104,11 @@ class SearchApi(
             {
                 "query": {
                     "bool": {
-                        "filter": [
-                            {
-                                "range": {
-                                    "updated": {
-                                        "gte": "$since",
-                                        "format": "yyyy-MM-dd"
-                                    }
-                                }
-                            }
-                        ],
-                        "must": [
-                            {
-                                "match": {
-                                    "status": "ACTIVE"
-                                }
-                            }
-                        ]
+                        "filter": [ { "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } } } ],
+                        "must": [ { "match": { "status": "ACTIVE" } } ]
                     }
                 },
-                "sort": [
-                    {
-                        "updated": {
-                            "order": "asc"
-                        }
-                    }
-                ],
+                "sort": [ { "updated": { "order": "asc" } } ],
                 "from": $offset,
                 "size": $limit
             }
