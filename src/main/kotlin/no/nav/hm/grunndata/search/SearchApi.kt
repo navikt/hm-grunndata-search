@@ -88,6 +88,8 @@ class SearchApi(
             val hits: OSResponseHits?,
         )
         data class Response(
+            val from: Int,
+            val size: Int,
             val total: Int,
             val results: List<JsonNode>,
         )
@@ -122,8 +124,10 @@ class SearchApi(
 
         val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query))
         return HttpResponse.ok(objectMapper.writeValueAsString(Response(
+            from = from,
+            size = size,
             total = results.hits?.total?.value ?: 0,
-            results = results.hits?.hits?.map { it.externalProduct } ?: listOf()
+            results = results.hits?.hits?.map { it.externalProduct } ?: listOf(),
         )))
     }
 }
