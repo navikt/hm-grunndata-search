@@ -103,11 +103,24 @@ class SearchApi(
         val query = """
             {
                 "query": {
-                    "range": {
-                        "updated": {
-                            "gte": "$since",
-                            "format": "yyyy-MM-dd"
-                        }
+                    "bool": {
+                        "filter": [
+                            {
+                                "range": {
+                                    "updated": {
+                                        "gte": "$since",
+                                        "format": "yyyy-MM-dd"
+                                    }
+                                }
+                            }
+                        ],
+                        "must": [
+                            {
+                                "match": {
+                                    "status": "ACTIVE"
+                                }
+                            }
+                        ]
                     }
                 },
                 "sort": [
