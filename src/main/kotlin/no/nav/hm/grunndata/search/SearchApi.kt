@@ -87,9 +87,13 @@ class SearchApi(
         data class OSResponse(
             val hits: OSResponseHits?,
         )
-        data class Response(
+        data class ResponseQuery(
             val offset: Int,
             val limit: Int,
+            val since: LocalDate,
+        )
+        data class Response(
+            val query: ResponseQuery,
             val total: Int,
             val results: List<JsonNode>,
         )
@@ -103,9 +107,7 @@ class SearchApi(
         val query = """
             {
                 "query": {
-                    "bool": {
-                        "filter": [ { "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } } } ]
-                    }
+                    "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } }
                 },
                 "sort": [ { "updated": { "order": "asc" } } ],
                 "from": $offset,
@@ -115,8 +117,11 @@ class SearchApi(
 
         val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query))
         return HttpResponse.ok(objectMapper.writeValueAsString(Response(
-            offset = offset,
-            limit = limit,
+            query = ResponseQuery(
+                offset = offset,
+                limit = limit,
+                since = since,
+            ),
             total = results.hits?.total?.value ?: 0,
             results = results.hits?.hits?.map { it.externalProduct } ?: listOf(),
         )))
