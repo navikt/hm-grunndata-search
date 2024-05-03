@@ -104,8 +104,7 @@ class SearchApi(
             {
                 "query": {
                     "bool": {
-                        "filter": [ { "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } } } ],
-                        "must": [ { "match": { "status": "ACTIVE" } } ]
+                        "filter": [ { "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } } } ]
                     }
                 },
                 "sort": [ { "updated": { "order": "asc" } } ],
