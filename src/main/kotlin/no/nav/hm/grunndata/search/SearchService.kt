@@ -75,6 +75,7 @@ class SearchService (private val osclient: RestHighLevelClient) {
     }
     companion object {
         const val PRODUCTS = "products"
+        const val EXTERNAL_PRODUCTS = "external_products"
         const val AGREEMENTS = "agreements"
         const val SUPPLIERS = "suppliers"
         const val NEWS = "news"
