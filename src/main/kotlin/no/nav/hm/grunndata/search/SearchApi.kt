@@ -9,6 +9,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Controller
 class SearchApi(
@@ -88,29 +89,47 @@ class SearchApi(
             val hits: OSResponseHits?,
         )
         data class ResponseQuery(
-            val offset: Int,
             val limit: Int,
-            val since: LocalDate,
+            val since: LocalDateTime,
+            val before: LocalDateTime?,
         )
         data class Response(
             val query: ResponseQuery,
-            val total: Int,
+            val hasMore: Boolean,
             val results: List<JsonNode>,
         )
 
-        val since = params["since"]?.let { LocalDate.parse(it) } ?: LocalDate.now().minusDays(1)
-        val offset = params["offset"]?.toIntOrNull() ?: 0
-        val limit = params["limit"]?.toIntOrNull() ?: 1000
+        val since = params["since"]?.let { since ->
+            runCatching { LocalDateTime.parse(since) }.getOrElse {
+                // Support date-only
+                LocalDate.parse(since).atStartOfDay()
+            }
+        } ?: LocalDate.now().minusDays(1).atStartOfDay()
 
-        LOG.info("Got request for external_products (since=$since, offset=$offset, limit=$limit)")
+        val before = params["before"]?.let { before ->
+            runCatching { LocalDateTime.parse(before) }.getOrElse {
+                // Support date-only
+                LocalDate.parse(before).atStartOfDay()
+            }
+        }
+
+        val maxLimit = 1000
+        val limit = params["limit"]?.toIntOrNull() ?: maxLimit
+        if (limit > 1000) {
+            return HttpResponse.badRequest("""{"error": "limit cannot be larger than $maxLimit"}""")
+        }
+
+        LOG.info("Got request for external_products (since=$since, before=$before, limit=$limit)")
+
+        val beforeExtraQueryContent = if (before != null) { """ , "lt": "$before" """ } else { "" }
 
         val query = """
             {
                 "query": {
-                    "range": { "updated": { "gte": "$since", "format": "yyyy-MM-dd" } }
+                    "range": { "updated": { "gte": "$since" $beforeExtraQueryContent } }
                 },
-                "sort": [ { "updated": { "order": "asc" } } ],
-                "from": $offset,
+                "sort": [ { "updated": { "order": "desc" } } ],
+                "from": 0,
                 "size": $limit
             }
         """.trimIndent()
@@ -118,11 +137,11 @@ class SearchApi(
         val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query))
         return HttpResponse.ok(objectMapper.writeValueAsString(Response(
             query = ResponseQuery(
-                offset = offset,
                 limit = limit,
                 since = since,
+                before = before,
             ),
-            total = results.hits?.total?.value ?: 0,
+            hasMore = results.hits?.total?.value != (results.hits?.hits?.count() ?: 0),
             results = results.hits?.hits?.map { it.externalProduct } ?: listOf(),
         )))
     }
