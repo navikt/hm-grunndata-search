@@ -27,6 +27,10 @@ micronaut:
         enabled: true
         step: PT1M
         descriptions: true
+  caches:
+    digihot-sortiment-bestillingsordning:
+      charset: 'UTF-8'
+      expire-after-write: 1h
 
 digihotSortiment:
   bestillingsordning: ${BESTILLINGSORDNING_URL:`https://navikt.github.io/digihot-sortiment/bestillingsordning_sortiment.json`}

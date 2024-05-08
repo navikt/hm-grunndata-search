@@ -50,6 +50,7 @@ dependencies {
     implementation("io.micronaut:micronaut-management")
 
     implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
