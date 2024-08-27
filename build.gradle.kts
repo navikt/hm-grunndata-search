@@ -10,7 +10,8 @@ val logbackClassicVersion = "1.4.14"
 val logbackEncoderVersion = "7.3"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
-val openSearchRestClientVersion = "2.4.1"
+val openSearchJavaClientVersion = "2.8.1"
+val openSearchRestClientVersion = "2.6.0"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -44,7 +45,8 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
+    implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
+    implementation("org.opensearch.client:opensearch-rest-client:$openSearchRestClientVersion")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
     implementation("io.micronaut:micronaut-management")
@@ -100,7 +102,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "8.0.1"
+    gradleVersion = "8.5"
 }
 
 repositories {

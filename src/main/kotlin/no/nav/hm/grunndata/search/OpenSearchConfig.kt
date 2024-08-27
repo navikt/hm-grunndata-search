@@ -10,12 +10,12 @@ import org.apache.http.client.CredentialsProvider
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
 import org.opensearch.client.RestClient
-import org.opensearch.client.RestHighLevelClient
 import org.slf4j.LoggerFactory
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
+
 
 @Factory
 class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
@@ -24,13 +24,13 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
         private val LOG = LoggerFactory.getLogger(OpenSearchConfig::class.java)
     }
     @Singleton
-    fun buildOpenSearchClient(): RestHighLevelClient {
+    fun buildOpenSearchClient(): RestClient {
         val credentialsProvider: CredentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
             AuthScope.ANY,
             UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password)
         )
-        val builder = RestClient.builder(HttpHost.create(openSearchEnv.url))
+        val client = RestClient.builder(HttpHost.create(openSearchEnv.url))
             .setRequestConfigCallback { it
                     .setConnectionRequestTimeout(5000)
                     .setConnectTimeout(1000)
@@ -45,9 +45,9 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
                 httpClientBuilder
                     .setMaxConnTotal(128)
                     .setMaxConnPerRoute(128)
-            }
+            }.build()
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
-        return RestHighLevelClient(builder)
+        return client
     }
 
     private fun devAndTestSettings(httpClientBuilder: HttpAsyncClientBuilder) {

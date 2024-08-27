@@ -6,19 +6,19 @@ import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
 import org.apache.http.util.EntityUtils
 import org.opensearch.client.Request
-import org.opensearch.client.RestHighLevelClient
 import org.slf4j.LoggerFactory
 import java.net.ConnectException
+import org.opensearch.client.RestClient
 
 @Singleton
-class SearchService (private val osclient: RestHighLevelClient) {
+class SearchService (private val osclient: RestClient) {
 
     fun searchWithBody(index: String, params: Map<String, String>?, body: String): String {
         if (params!=null) require(onlyAllowedParams(params)) { "Disallowed request params present in " + params.keys }
         return try {
             val entity = StringEntity(body, ContentType.APPLICATION_JSON)
             val request: Request = newRequest("POST", "/$index/_search", params, entity)
-            val httpEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            val httpEntity: HttpEntity = osclient.performRequest(request).entity
             EntityUtils.toString(httpEntity)
         } catch (e: ConnectException) {
             LOG.error("No connection to Opensearch", e)
@@ -30,7 +30,7 @@ class SearchService (private val osclient: RestHighLevelClient) {
         if (params!=null) require(onlyAllowedParams(params)) { "Disallowed request params present in " + params.keys }
         return try {
             val request: Request = newRequest("GET", "/$index/_search", params, null)
-            val responseEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            val responseEntity: HttpEntity = osclient.performRequest(request).entity
             EntityUtils.toString(responseEntity)
         } catch (e: ConnectException) {
            LOG.error("No connection to Opensearch", e)
@@ -42,7 +42,7 @@ class SearchService (private val osclient: RestHighLevelClient) {
         if (params!=null) require(onlyAllowedParams(params)) { "Disallowed request params present in " + params.keys }
         return try {
             val request: Request = newRequest("GET", "/$index/_doc/$id", params, null)
-            val responseEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            val responseEntity: HttpEntity = osclient.performRequest(request).entity
             EntityUtils.toString(responseEntity)
         } catch (e: ConnectException) {
             LOG.error("No connection to Opensearch", e)
@@ -54,7 +54,7 @@ class SearchService (private val osclient: RestHighLevelClient) {
         return try {
             val entity = StringEntity(query, ContentType.APPLICATION_JSON)
             val request: Request = newRequest("POST", "/_plugins/_sql", params, entity)
-            val responseEntity: HttpEntity = osclient.lowLevelClient.performRequest(request).entity
+            val responseEntity: HttpEntity = osclient.performRequest(request).entity
             EntityUtils.toString(responseEntity)
         } catch (e: ConnectException) {
             LOG.error("No connection to Opensearch", e)
