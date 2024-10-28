@@ -72,6 +72,12 @@ class SearchApi(
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
+    @Post(uris = ["/alternative_products/_search{?params*}"])
+    fun searchAlternativesWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
+        LOG.info("Got body request for alternatives")
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.ALTERNATIVES, params, body))
+    }
+
     @Post(uris=["/external_products{?params*}"])
     fun getExternalProducts(@QueryValue params: Map<String, String>): HttpResponse<String> {
         data class OSResponseHit(
