@@ -31,7 +31,7 @@ spec:
     access: read
     instance: grunndata
   env:
-    - name: JAVA_OPTS
+    - name: JDK_JAVA_OPTS
       value: "{{java_opts}}"
   {{#each env}}
     - name: {{@key}}
