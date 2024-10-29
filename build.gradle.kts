@@ -3,8 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.4.2"
-val micrometerRegistryPrometheusVersion = "1.9.1"
+val micronautVersion="4.6.3"
 val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.14"
 val logbackEncoderVersion = "7.3"
