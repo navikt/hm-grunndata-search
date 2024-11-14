@@ -13,11 +13,16 @@ import jakarta.inject.Singleton
 
 
 @Singleton
-class JacksonConfig(@Value("digihot.cluster") val digitHotCluster: String) : BeanCreatedEventListener<ObjectMapper> {
+class JacksonConfig(@Value("\${digihot.cluster}") val digitHotCluster: String) : BeanCreatedEventListener<ObjectMapper> {
+
+    companion object {
+        private val LOG = org.slf4j.LoggerFactory.getLogger(JacksonConfig::class.java)
+    }
 
     override fun onCreated(event: BeanCreatedEvent<ObjectMapper>): ObjectMapper {
         val objectMapper = event.bean
         val std = InjectableValues.Std()
+        LOG.info("Got digihotCluster: $digitHotCluster")
         std.addValue("digihotCluster", digitHotCluster)
         objectMapper.registerModule(JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
