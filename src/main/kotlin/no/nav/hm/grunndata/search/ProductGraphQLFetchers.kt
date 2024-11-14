@@ -1,11 +1,23 @@
 package no.nav.hm.grunndata.search
 
+import com.fasterxml.jackson.annotation.JacksonInject
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.readValue
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
+import io.micronaut.context.annotation.Value
 import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
@@ -66,7 +78,6 @@ data class OpenSearchResponseHit (
     val product: Product,
 )
 
-@Introspected
 data class Product (
     val id: String,
     val supplier: ProductSupplier,
@@ -95,16 +106,31 @@ data class Product (
     val filters: TechDataFilters,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
+    @JacksonInject("digihotCluster")
+    @JsonProperty(value= "digihotCluster", required=false)
+    val digihotCluster: String?=null
 ) {
     fun dataAsText(): String = data.joinToString { it.toString() }
 
-    fun productURL(): String =
-        "https://finnhjelpemiddel.nav.no/produkt/${this.seriesId}"
+    fun productURL(): String {
+       return when (digihotCluster) {
+           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
+           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/${seriesId}"
+           "localhost" -> "http://localhost:8080/produkt/${seriesId}"
+           else -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
+       }
+    }
 
-    // TODO: Fix url when a product variant page is available
-    fun productVariantURL(): String =
-        "https://finnhjelpemiddel.nav.no/produkt/${this.seriesId}"
+    fun productVariantURL(): String {
+       return when (digihotCluster) {
+           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
+           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
+           "localhost" -> "http://localhost:8080/produkt/${seriesId}?term=${hmsArtNr}"
+           else -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
+       }
+    }
 }
+
 
 @Introspected
 data class AgreementInfoDoc (

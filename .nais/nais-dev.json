@@ -3,7 +3,8 @@
   "max_replicas": 1,
   "java_opts": "-Xms128m -Xmx512m",
   "env": {
-    "GRAPHQL_GRAPHIQL_ENABLE": "true"
+    "GRAPHQL_GRAPHIQL_ENABLE": "true",
+    "DIGIHOT_CLUSTER": "dev"
   },
   "ingress": [
     "https://hm-grunndata-search.intern.dev.nav.no"
