@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.6.3"
+val micronautVersion="4.7.0"
 val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.14"
 val logbackEncoderVersion = "7.3"
@@ -11,16 +11,17 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.8.1"
 val openSearchRestClientVersion = "2.6.0"
+val jupiterVersion = "5.9.2"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("kapt") version "1.9.21"
+    kotlin("jvm") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.3.8"
+    id("io.micronaut.application") version "4.4.4"
 }
 
 configurations.all {
@@ -56,7 +57,7 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$jupiterVersion")
 }
 
 micronaut {
