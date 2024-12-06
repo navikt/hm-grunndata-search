@@ -93,6 +93,7 @@ data class Product (
     val isoCategoryTitleShort: String?,
     val isoCategoryText: String?,
     val isoCategoryTextShort: String?,
+    val main: Boolean = true,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val seriesId: String?=null,
