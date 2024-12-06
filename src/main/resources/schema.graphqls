@@ -19,6 +19,7 @@ type Product {
     isoCategoryTitleShort: String
     isoCategoryText: String
     isoCategoryTextShort: String
+    main: Boolean!
     accessory: Boolean!
     sparePart: Boolean!
     seriesId: String
