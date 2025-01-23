@@ -6,12 +6,15 @@ import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.sun.org.apache.bcel.internal.util.Args.require
+import graphql.com.google.common.base.Preconditions.checkNotNull
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import java.util.Collections.emptySet
 import java.util.UUID
 
 private val LOG = LoggerFactory.getLogger(ProductGraphQLFetchers::class.java)
@@ -114,10 +117,10 @@ data class Product (
 
     fun productVariantURL(): String {
        return when (digihotCluster) {
-           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
-           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
-           "localhost" -> "http://localhost:8080/produkt/${seriesId}?term=${hmsArtNr}"
-           else -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}?term=${hmsArtNr}"
+           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
+           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/hmsartnr/${hmsArtNr}"
+           "localhost" -> "http://localhost:8080/produkt/hmsartnr/${hmsArtNr}"
+           else -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
        }
     }
 }
