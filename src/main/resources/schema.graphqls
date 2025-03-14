@@ -142,7 +142,8 @@ type TechData {
 }
 
 type CompatibleWith {
-    seriesIds: [String!]!
+    seriesIds: [String]
+    productIds: [String]
 }
 
 type Bestillingsordning {
