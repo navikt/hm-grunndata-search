@@ -33,7 +33,7 @@ class ProductGraphQLFetchers(
         require(hmsnrsSet.count() <= maxNumberOfResults) { "too many hmsnrs in request (max=$maxNumberOfResults)" }
 
         val res = runCatching {
-            searchService.searchWithBody(SearchService.PRODUCTS, null, hmsnrsSearchQuery(hmsnrsSet))
+            searchService.searchWithBody(SearchService.PRODUCTS, emptyMap(), hmsnrsSearchQuery(hmsnrsSet))
         }.onFailure { e ->
             LOG.error("Exception caught and ignored while searching for products (graphql)", e)
         }.onSuccess {

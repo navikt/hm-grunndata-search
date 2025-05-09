@@ -1,78 +1,89 @@
 package no.nav.hm.grunndata.search
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
-import org.apache.http.HttpHost
-import org.apache.http.auth.AuthScope
-import org.apache.http.auth.UsernamePasswordCredentials
-import org.apache.http.client.CredentialsProvider
-import org.apache.http.impl.client.BasicCredentialsProvider
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
-import org.opensearch.client.RestClient
-import org.slf4j.LoggerFactory
-import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
-import javax.net.ssl.X509TrustManager
+import org.apache.hc.client5.http.auth.AuthScope
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials
+import org.apache.hc.client5.http.config.ConnectionConfig
+import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder
+import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider
+import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManagerBuilder
+import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder
+import org.apache.hc.core5.http.HttpHost
+import org.apache.hc.core5.ssl.SSLContextBuilder
+import org.apache.hc.core5.util.Timeout
+import org.opensearch.client.json.jackson.JacksonJsonpMapper
+import org.opensearch.client.opensearch.OpenSearchClient
+import org.opensearch.client.transport.OpenSearchTransport
+import org.opensearch.client.transport.httpclient5.ApacheHttpClient5TransportBuilder
+import org.slf4j.LoggerFactory
 
 
 @Factory
-class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
+class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val objectMapper: ObjectMapper) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(OpenSearchConfig::class.java)
     }
+
     @Singleton
-    fun buildOpenSearchClient(): RestClient {
-        val credentialsProvider: CredentialsProvider = BasicCredentialsProvider()
+    fun buildOpenSearchClient(): OpenSearchClient {
+        val host = HttpHost.create(openSearchEnv.url)
+        val credentialsProvider: BasicCredentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
-            AuthScope.ANY,
-            UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password)
+            AuthScope(host),
+            UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password.toCharArray())
         )
-        val client = RestClient.builder(HttpHost.create(openSearchEnv.url))
-            .setRequestConfigCallback { it
-                    .setConnectionRequestTimeout(5000)
-                    .setConnectTimeout(1000)
-                    .setSocketTimeout(20000)
-            }
-            .setHttpClientConfigCallback {
-                    httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
-                if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.user) {
-                    LOG.info("Using dev settings for ${openSearchEnv.url}")
-                    devAndTestSettings(httpClientBuilder)
-                }
-                httpClientBuilder
+        val sslcontext = if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.user) {
+            LOG.warn("Using dev/test sslcontext cause url is ${openSearchEnv.url} and user is ${openSearchEnv.user}")
+            SSLContextBuilder
+                .create()
+                .loadTrustMaterial(
+                    null
+                ) { chains: Array<X509Certificate?>?, authType: String? -> true }
+                .build()
+        } else {
+            SSLContext.getDefault()
+        }
+
+        val builder = ApacheHttpClient5TransportBuilder.builder(host)
+            .setMapper(JacksonJsonpMapper(objectMapper))
+            .setHttpClientConfigCallback { httpClientBuilder: HttpAsyncClientBuilder ->
+                val tlsStrategy = ClientTlsStrategyBuilder.create()
+                    .setSslContext(sslcontext)
+                    .build()
+                val connectionConfig = ConnectionConfig.custom()
+                    .setSocketTimeout(Timeout.ofSeconds(20))
+                    .setConnectTimeout(Timeout.ofSeconds(10))
+                    .build()
+                val connectionManager = PoolingAsyncClientConnectionManagerBuilder
+                    .create()
+                    .setDefaultConnectionConfig(connectionConfig)
                     .setMaxConnTotal(128)
                     .setMaxConnPerRoute(128)
-            }.build()
+                    .setTlsStrategy(tlsStrategy)
+                    .build()
+                httpClientBuilder
+                    .setDefaultCredentialsProvider(credentialsProvider)
+                    .setConnectionManager(connectionManager)
+            }
+
+        val transport: OpenSearchTransport = builder.build()
+        val client = OpenSearchClient(transport)
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
         return client
     }
 
-    private fun devAndTestSettings(httpClientBuilder: HttpAsyncClientBuilder) {
-        httpClientBuilder.setSSLHostnameVerifier { _, _ -> true }
-        val context = SSLContext.getInstance("SSL")
-        context.init(null, arrayOf(object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-            }
-
-            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-            }
-
-            override fun getAcceptedIssuers(): Array<X509Certificate>? {
-                return null
-            }
-
-        }), SecureRandom())
-        httpClientBuilder.setSSLContext(context)
-    }
 
 }
 
 @ConfigurationProperties("opensearch")
 class OpenSearchEnv {
-    var user: String="admin"
-    var password: String="admin"
+    var user: String = "admin"
+    var password: String = "admin"
     var url: String = "https://localhost:9200"
 }

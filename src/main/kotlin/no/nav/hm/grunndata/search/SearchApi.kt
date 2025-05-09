@@ -23,59 +23,59 @@ class SearchApi(
     @Post(uris=["/products/_search{?params*}"])
     fun searchProductWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for product")
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.PRODUCTS, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.PRODUCTS, params?: emptyMap(), body))
     }
 
     @Get(uris=["/products/_search{?params*}"])
     fun searchProductWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for product")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCTS, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.PRODUCTS, params?: emptyMap()))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
     @Post(uris=["/agreements/_search{?params*}"])
     fun searchAgreementWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for agreement")
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.AGREEMENTS, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.AGREEMENTS, params?: emptyMap(), body))
     }
 
     @Get(uris=["/agreements/_search{?params*}"])
     fun searchAgreementWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for agreement")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.AGREEMENTS, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.AGREEMENTS, params?: emptyMap()))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
     @Post(uris=["/suppliers/_search{?params*}"])
     fun searchSupplierWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for supplier")
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.SUPPLIERS, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.SUPPLIERS, params?: emptyMap(), body))
     }
 
     @Get(uris=["/suppliers/_search{?params*}"])
     fun searchSupplierWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for supplier")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIERS, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.SUPPLIERS, params?: emptyMap()))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
     @Post(uris=["/news/_search{?params*}"])
     fun searchNewsWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for news")
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.NEWS, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.NEWS, params?: emptyMap(), body))
     }
 
     @Get(uris=["/news/_search{?params*}"])
     fun searchNewsWithQuery(params: Map<String, String>?): HttpResponse<String> {
         LOG.info("Got query request for news")
-        return HttpResponse.ok(searchService.searchWithQuery(SearchService.NEWS, params))
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.NEWS, params?: emptyMap()))
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
     @Post(uris = ["/alternative_products/_search{?params*}"])
     fun searchAlternativesWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for alternatives")
-        return HttpResponse.ok(searchService.searchWithBody(SearchService.ALTERNATIVES, params, body))
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.ALTERNATIVES, params?: emptyMap(), body))
     }
 
     @Post(uris=["/external_products{?params*}"])

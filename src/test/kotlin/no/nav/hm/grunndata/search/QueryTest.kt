@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 
-@MicronautTest
+//@MicronautTest
 class QueryTest(private val searchService: SearchService, private val objectMapper: ObjectMapper)  {
 
     val suppliers = listOf("AB Transistor Sweden")
-    //@Test
+    @Test
     fun queryTest() {
         suppliers.forEach {
             val query = """
