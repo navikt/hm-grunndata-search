@@ -1,7 +1,7 @@
 {
   "min_replicas": 3,
   "max_replicas": 3,
-  "java_opts": "-Xms256m -Xmx2048m",
+  "java_opts": "-Xms256m -Xmx2048m -XX:+UseG1GC",
   "env": {
     "DIGIHOT_CLUSTER": "prod"
   },

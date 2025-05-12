@@ -1,7 +1,7 @@
 {
   "min_replicas": 1,
   "max_replicas": 1,
-  "java_opts": "-Xms128m -Xmx512m",
+  "java_opts": "-Xms128m -Xmx512m -XX:+UseG1GC",
   "env": {
     "GRAPHQL_GRAPHIQL_ENABLE": "true",
     "DIGIHOT_CLUSTER": "dev"
