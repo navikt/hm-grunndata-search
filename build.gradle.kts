@@ -10,7 +10,7 @@ val logbackEncoderVersion = "7.3"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.18.0"
-val httpClient5Version = "5.4.1"
+val httpClient5Version = "5.4.4"
 val jupiterVersion = "5.9.2"
 
 group = "no.nav.hm"
