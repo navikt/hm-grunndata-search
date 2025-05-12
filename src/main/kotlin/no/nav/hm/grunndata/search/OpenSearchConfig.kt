@@ -5,6 +5,7 @@ import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import org.apache.hc.client5.http.auth.AuthScope
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials
@@ -15,6 +16,7 @@ import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManagerBu
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder
 import org.apache.hc.core5.http.HttpHost
 import org.apache.hc.core5.ssl.SSLContextBuilder
+import org.apache.hc.core5.util.TimeValue
 import org.apache.hc.core5.util.Timeout
 import org.opensearch.client.json.jackson.JacksonJsonpMapper
 import org.opensearch.client.opensearch.OpenSearchClient
@@ -59,6 +61,7 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
                 val connectionConfig = ConnectionConfig.custom()
                     .setSocketTimeout(Timeout.ofSeconds(20))
                     .setConnectTimeout(Timeout.ofSeconds(10))
+                    .setTimeToLive(TimeValue.of(5, TimeUnit.MINUTES))
                     .build()
                 val connectionManager = PoolingAsyncClientConnectionManagerBuilder
                     .create()
