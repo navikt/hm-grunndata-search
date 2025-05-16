@@ -33,8 +33,14 @@ class SearchService(private val osclient: OpenSearchClient) {
 
     private fun performRequest(request: Request, params: Map<String, String>): String {
         require(onlyAllowedParams(params)) { "Disallowed request params present in " + params.keys }
-        return osclient.generic().execute(request).use { response ->
-            response.body.get().bodyAsString()
+        return try {
+            osclient.generic().execute(request).use { response ->
+                response.body.get().bodyAsString()
+            }
+        }
+        catch (e: Exception) {
+            LOG.error("Error performing request", e)
+            throw e
         }
     }
 
