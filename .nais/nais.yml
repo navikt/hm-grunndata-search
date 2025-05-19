@@ -33,6 +33,8 @@ spec:
   env:
     - name: JDK_JAVA_OPTIONS
       value: "{{ java_opts }}"
+    - name: LD_PRELOAD
+      value: "/usr/lib/x86_64-linux-gnu/libjemalloc.so"
   {{#each env}}
     - name: {{@key}}
       value: "{{this}}"
