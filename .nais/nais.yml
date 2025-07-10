@@ -64,3 +64,4 @@ spec:
         - application: hotsak-frontend
         - application: hm-forslagsmotor-tilbehoer
         - application: hm-delbestilling-api
+        - application: hm-finnhjelpemiddel-bff
