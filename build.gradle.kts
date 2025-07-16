@@ -3,9 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.8.2"
-val junitJupiterVersion = "5.9.0"
-val logbackClassicVersion = "1.4.14"
+val micronautVersion="4.9.1"
 val logbackEncoderVersion = "7.3"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
@@ -21,7 +19,7 @@ plugins {
     kotlin("kapt") version "1.9.25"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.5.3"
+    id("io.micronaut.application") version "4.5.4"
 }
 
 configurations.all {
@@ -31,7 +29,7 @@ configurations.all {
 }
 
 dependencies {
-    api("ch.qos.logback:logback-classic:$logbackClassicVersion")
+    api("ch.qos.logback:logback-classic")
     api("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
     runtimeOnly("org.yaml:snakeyaml")
     implementation("io.micronaut:micronaut-jackson-databind")
@@ -55,7 +53,6 @@ dependencies {
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$jupiterVersion")
 }
