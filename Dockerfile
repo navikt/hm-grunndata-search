@@ -1,4 +1,4 @@
-FROM debian:12-slim
+FROM debian:12.8-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y openjdk-17-jdk libjemalloc-dev
 ENV TZ="Europe/Oslo"
