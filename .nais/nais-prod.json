@@ -1,5 +1,5 @@
 {
-  "min_replicas": 2,
+  "min_replicas": 3,
   "max_replicas": 4,
   "java_opts": "-Xms256m -Xmx2548m -XX:+UseG1GC",
   "env": {

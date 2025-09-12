@@ -5,7 +5,7 @@ micronaut:
   netty:
     event-loops:
       default:
-        num-threads: 128
+        num-threads: 256
         prefer-native-transport: true
   server:
     port: ${SERVER_PORT:8080}
