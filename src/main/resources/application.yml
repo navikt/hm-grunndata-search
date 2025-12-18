@@ -55,7 +55,7 @@ graphql:
     enabled: ${GRAPHQL_GRAPHIQL_ENABLE:false}
 
 opensearch:
-  password: ${OPEN_SEARCH_PASSWORD:T3@mM1m3!}
+  password: ${OPEN_SEARCH_PASSWORD:admin}
   user: ${OPEN_SEARCH_USERNAME:admin}
   url: ${OPEN_SEARCH_URI:`https://localhost:9200`}
 

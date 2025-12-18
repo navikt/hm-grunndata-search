@@ -12,7 +12,6 @@ class SearchService(private val osclient: OpenSearchClient) {
 
     fun searchWithBody(index: String, params: Map<String, String>, body: String): String {
         val request: Request = newRequest("POST", "/$index/_search", params, body)
-        LOG.debug("search on index: $index params: $params and body: $body")
         return performRequest(request, params)
     }
 
