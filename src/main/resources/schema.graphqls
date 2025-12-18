@@ -91,6 +91,7 @@ type TechDataFilters {
     totalVektKG: Int
     lengdeCM: Int
     breddeCM: Int
+    dybdeCM: Int
     beregnetBarn: String
     brukervektMaksKG: Int
 }

@@ -179,6 +179,7 @@ data class TechDataFilters (
     val totalVektKG: Int?,
     val lengdeCM: Int?,
     val breddeCM: Int?,
+    val dybdeCM: Int?,
     val beregnetBarn: String?,
     val brukervektMaksKG: Int?,
 )
