@@ -147,6 +147,7 @@ data class AttributesDoc (
     val shortdescription: String? = null,
     val text: String? = null,
     val url: String? = null,
+    val documentUrls: List<DocumentUrl>? = null,
     val bestillingsordning: Boolean? = null,
     val digitalSoknad: Boolean? = null,
     val sortimentKategori: String? = null,
@@ -245,4 +246,10 @@ data class TechData (
 @Introspected
 data class CompatibleWith (
     val seriesIds: Set<UUID> = emptySet(),
+)
+
+@Introspected
+data class DocumentUrl (
+    val url: String,
+    val title: String,
 )

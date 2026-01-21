@@ -61,6 +61,7 @@ type AttributesDoc {
     shortdescription: String
     text: String
     url: String
+    documentUrls: [DocumentUrl!]
     bestillingsordning: Boolean
     digitalSoknad: Boolean
     sortimentKategori: String
@@ -145,6 +146,11 @@ type TechData {
 type CompatibleWith {
     seriesIds: [String]
     productIds: [String]
+}
+
+type DocumentUrl {
+    title: String!
+    url: String!
 }
 
 type Bestillingsordning {
