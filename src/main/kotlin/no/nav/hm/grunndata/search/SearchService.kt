@@ -64,6 +64,7 @@ class SearchService(private val osclient: OpenSearchClient) {
         const val SUPPLIERS = "suppliers"
         const val NEWS = "news"
         const val ALTERNATIVES = "alternative_products"
+        const val SERVICEJOBS = "servicejobs"
         private val LOG = LoggerFactory.getLogger(SearchService::class.java)
         val ALLOWED_REQUEST_PARAMS = setOf("q", "filter_path", "pretty", "format")
     }

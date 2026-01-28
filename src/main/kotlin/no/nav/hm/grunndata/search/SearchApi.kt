@@ -72,6 +72,19 @@ class SearchApi(
             .header(CACHE_CONTROL, "public, immutable, max-age=300")
     }
 
+    @Post(uris=["/servicejobs/_search{?params*}"])
+    fun searchServicejobsWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
+        LOG.info("Got body request for servicejobs")
+        return HttpResponse.ok(searchService.searchWithBody(SearchService.SERVICEJOBS, params?: emptyMap(), body))
+    }
+
+    @Get(uris=["/servicejobs/_search{?params*}"])
+    fun searchServicejobsWithQuery(params: Map<String, String>?): HttpResponse<String> {
+        LOG.info("Got query request for servicejobs")
+        return HttpResponse.ok(searchService.searchWithQuery(SearchService.SERVICEJOBS, params?: emptyMap()))
+            .header(CACHE_CONTROL, "public, immutable, max-age=300")
+    }
+
     @Post(uris = ["/alternative_products/_search{?params*}"])
     fun searchAlternativesWithBody(@QueryValue params: Map<String, String>?, @Body body: String): HttpResponse<String> {
         LOG.info("Got body request for alternatives")
