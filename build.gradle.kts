@@ -5,11 +5,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jvmTarget = "17"
 val micronautVersion="4.10.12"
-val logbackEncoderVersion = "9.0"
+val logbackEncoderVersion = "8.1"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
-val openSearchJavaClientVersion = "2.18.0"
-val httpClient5Version = "5.4.4"
+val openSearchJavaClientVersion = "3.8.0"
+val httpClient5Version = "5.6.1"
 val jupiterVersion = "5.9.2"
 
 group = "no.nav.hm"
