@@ -6,17 +6,23 @@ import com.fasterxml.jackson.databind.InjectableValues
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Value
 import io.micronaut.context.event.BeanCreatedEvent
 import io.micronaut.context.event.BeanCreatedEventListener
 import jakarta.inject.Singleton
 
 
-@Singleton
+@Factory
 class JacksonConfig(@Value("\${digihot.cluster}") val digitHotCluster: String) : BeanCreatedEventListener<ObjectMapper> {
 
     companion object {
         private val LOG = org.slf4j.LoggerFactory.getLogger(JacksonConfig::class.java)
+    }
+
+    @Singleton
+    fun objectMapper(): ObjectMapper {
+        return ObjectMapper().findAndRegisterModules()
     }
 
     override fun onCreated(event: BeanCreatedEvent<ObjectMapper>): ObjectMapper {

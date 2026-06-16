@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
-val jvmTarget = "17"
-val micronautVersion = "4.10.14"
+val jvmTarget = "25"
+val micronautVersion = "5.0.2"
 val logbackEncoderVersion = "8.1"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
@@ -16,12 +16,12 @@ group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.21"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.1.21"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.3.0"
     id("java")
     id("com.gradleup.shadow") version "9.3.1"
-    id("io.micronaut.application") version "4.6.2"
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("io.micronaut.application") version "5.0.0"
+    id("com.google.devtools.ksp") version "2.3.0"
 }
 
 configurations.all {
@@ -34,8 +34,11 @@ dependencies {
     api("ch.qos.logback:logback-classic")
     api("net.logstash.logback:logstash-logback-encoder:$logbackEncoderVersion")
     runtimeOnly("org.yaml:snakeyaml")
+
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
@@ -99,7 +102,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "8.11"
+    gradleVersion = "9.5.0"
 }
 
 repositories {
