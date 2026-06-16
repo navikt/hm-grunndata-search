@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 RUN apt-get update && apt-get install -y libjemalloc-dev && apt-get remove -y wget && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 ENV TZ="Europe/Oslo"
