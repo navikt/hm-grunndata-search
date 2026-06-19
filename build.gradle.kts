@@ -1,6 +1,9 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.kotlin.dsl.named
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 
 val jvmTarget = "25"
@@ -16,12 +19,12 @@ group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.3.0"
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.3.0"
+    id("org.jetbrains.kotlin.jvm") version "2.3.21"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.3.21"
     id("java")
     id("com.gradleup.shadow") version "9.3.1"
     id("io.micronaut.application") version "5.0.0"
-    id("com.google.devtools.ksp") version "2.3.0"
+    id("com.google.devtools.ksp") version "2.3.7"
 }
 
 configurations.all {
@@ -45,7 +48,10 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
+    implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion") {
+        exclude(group = "com.fasterxml.jackson.core", module = "jackson-core")
+        exclude(group = "com.fasterxml.jackson.core", module = "jackson-databind")
+    }
     implementation("org.apache.httpcomponents.client5:httpclient5:$httpClient5Version")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
