@@ -5,10 +5,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jvmTarget = "25"
 val micronautVersion = "5.0.2"
-val logbackEncoderVersion = "8.1"
+val logbackEncoderVersion = "9.0"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
-val openSearchJavaClientVersion = "3.8.0"
+val openSearchJavaClientVersion = "3.9.0"
 val httpClient5Version = "5.6.1"
 val jupiterVersion = "5.9.2"
 
@@ -36,9 +36,6 @@ dependencies {
     runtimeOnly("org.yaml:snakeyaml")
 
     implementation("io.micronaut:micronaut-jackson-databind")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")

@@ -1,7 +1,6 @@
 package no.nav.hm.grunndata.search
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import io.micronaut.cache.annotation.Cacheable
@@ -9,6 +8,8 @@ import io.micronaut.context.annotation.Value
 import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import tools.jackson.core.type.TypeReference
+import tools.jackson.databind.ObjectMapper
 import java.net.URI
 
 private val LOG = LoggerFactory.getLogger(BestillingsordningGraphQLFetchers::class.java)
@@ -37,7 +38,10 @@ open class BestillingsordningGraphQLFetchers(
 
     @Cacheable("digihot-sortiment-bestillingsordning")
     open fun cachedBestillingsordning(): Map<String, BestillingsordningDTO> =
-        objectMapper.readValue(URI(bestillingsordningUrl).toURL(), object : TypeReference<List<BestillingsordningDTO>>(){}).associateBy { it.hmsnr }
+        objectMapper.readValue(
+            URI(bestillingsordningUrl).toURL().openStream(),
+            object : TypeReference<List<BestillingsordningDTO>>(){}
+        ).associateBy { it.hmsnr }
 }
 
 @Introspected

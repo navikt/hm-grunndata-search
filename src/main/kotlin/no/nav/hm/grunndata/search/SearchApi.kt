@@ -1,13 +1,12 @@
 package no.nav.hm.grunndata.search
 
 import com.fasterxml.jackson.annotation.JsonAlias
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.micronaut.http.HttpHeaders.CACHE_CONTROL
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -153,7 +152,7 @@ class SearchApi(
             }
         """.trimIndent()
 
-        val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query))
+        val results: OSResponse = objectMapper.readValue(searchService.searchWithBody(SearchService.EXTERNAL_PRODUCTS, mapOf(), query), OSResponse::class.java)
         return HttpResponse.ok(objectMapper.writeValueAsString(Response(
             query = ResponseQuery(
                 limit = limit,

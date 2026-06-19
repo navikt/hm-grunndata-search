@@ -1,11 +1,6 @@
 package no.nav.hm.grunndata.search
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.convertValue
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+
 import graphql.GraphQL
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
@@ -20,6 +15,10 @@ import io.micronaut.core.io.ResourceResolver
 import jakarta.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import tools.jackson.databind.DeserializationFeature
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.json.JsonMapper
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -76,13 +75,12 @@ data class Pagination (
 fun <R> fetcher(block: suspend (args: DataFetchingEnvironment) -> R): DataFetcher<R> = DataFetcher { runBlocking(Dispatchers.IO) { block(it) } }
 
 // Used to convert from java hashmaps into kotlin data types
-val objectConverter: ObjectMapper = jacksonObjectMapper()
-    .registerModule(JavaTimeModule())
-    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+val objectConverter: ObjectMapper = JsonMapper.builderWithJackson2Defaults()
+    .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build()
 
 fun ObjectMapper.prettifyJson(s: String?) = writerWithDefaultPrettyPrinter().writeValueAsString(readTree(s))
 
 inline fun <T: DataFetchingEnvironment, reified R> T.getArgumentAs(arg: String): R? {
-    return arguments[arg]?.let { objectConverter.convertValue<R>(it) }
+    return arguments[arg]?.let {  objectConverter.convertValue(it, object : tools.jackson.core.type.TypeReference<R>() {}) }
 }

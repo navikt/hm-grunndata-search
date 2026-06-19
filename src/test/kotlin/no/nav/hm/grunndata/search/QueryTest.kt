@@ -1,8 +1,7 @@
 package no.nav.hm.grunndata.search
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.Test
+import tools.jackson.databind.ObjectMapper
 
 @MicronautTest
 class QueryTest(private val searchService: SearchService, private val objectMapper: ObjectMapper)  {

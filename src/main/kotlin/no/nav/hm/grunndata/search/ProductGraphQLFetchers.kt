@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JacksonInject
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -38,7 +37,7 @@ class ProductGraphQLFetchers(
             LOG.error("Exception caught and ignored while searching for products (graphql)", e)
         }.onSuccess {
             // LOG.info("Resultat: ${objectMapper.prettifyJson(it)}")
-        }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it) } ?: OpenSearchResponse.empty()
+        }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it, OpenSearchResponse::class.java) } ?: OpenSearchResponse.empty()
         return res.hits.hits.map { it.product }
     }
 }
