@@ -44,18 +44,13 @@ endpoints:
   all:
     path: "/internal"
 
-jackson:
-  bean-introspection-module: true
-  serialization:
-    indentOutput: true
-
 graphql:
   enabled: true
   graphiql: # enables the /graphiql endpoint to test calls against your graph.
     enabled: ${GRAPHQL_GRAPHIQL_ENABLE:false}
 
 opensearch:
-  password: ${OPEN_SEARCH_PASSWORD:admin}
+  password: ${OPEN_SEARCH_PASSWORD:T3@mM1m3!}
   user: ${OPEN_SEARCH_USERNAME:admin}
   url: ${OPEN_SEARCH_URI:`https://localhost:9200`}
 
