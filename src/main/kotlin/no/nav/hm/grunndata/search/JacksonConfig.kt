@@ -8,7 +8,9 @@ import io.micronaut.context.event.BeanCreatedEventListener
 import jakarta.inject.Singleton
 import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.InjectableValues
+import tools.jackson.databind.SerializationFeature
 import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.introspect.DefaultAccessorNamingStrategy
 import tools.jackson.databind.json.JsonMapper
 
 
@@ -30,6 +32,10 @@ class JacksonConfig(@param:Property(name="digihot.cluster") val digitHotCluster:
             .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+            .configure(SerializationFeature.INDENT_OUTPUT, false)
+            .accessorNaming(DefaultAccessorNamingStrategy.Provider().withFirstCharAcceptance(true, true))
+            .configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, false)
+            .changeDefaultPropertyInclusion { incl -> incl.withContentInclusion(JsonInclude.Include.NON_NULL) }
             .injectableValues(std)
         return event.bean
     }
