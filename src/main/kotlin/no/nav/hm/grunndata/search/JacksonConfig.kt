@@ -12,6 +12,8 @@ import tools.jackson.databind.SerializationFeature
 import tools.jackson.databind.cfg.DateTimeFeature
 import tools.jackson.databind.introspect.DefaultAccessorNamingStrategy
 import tools.jackson.databind.json.JsonMapper
+import tools.jackson.module.kotlin.kotlinModule
+
 
 
 @Singleton
@@ -27,7 +29,9 @@ class JacksonConfig(@param:Property(name="digihot.cluster") val digitHotCluster:
         val std = InjectableValues.Std()
         std.addValue("digihotCluster", digitHotCluster)
         event.bean
-            .changeDefaultPropertyInclusion{it.withValueInclusion(JsonInclude.Include.NON_NULL)}
+            .addModule(kotlinModule())
+            .changeDefaultPropertyInclusion{incl -> incl.withValueInclusion(JsonInclude.Include.ALWAYS)}
+            .changeDefaultPropertyInclusion{incl -> incl.withContentInclusion(JsonInclude.Include.ALWAYS)}
             .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
             .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -35,7 +39,6 @@ class JacksonConfig(@param:Property(name="digihot.cluster") val digitHotCluster:
             .configure(SerializationFeature.INDENT_OUTPUT, false)
             .accessorNaming(DefaultAccessorNamingStrategy.Provider().withFirstCharAcceptance(true, true))
             .configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, false)
-            .changeDefaultPropertyInclusion { incl -> incl.withContentInclusion(JsonInclude.Include.NON_NULL) }
             .injectableValues(std)
         return event.bean
     }
