@@ -10,6 +10,7 @@ import tools.jackson.databind.DeserializationFeature
 import tools.jackson.databind.InjectableValues
 import tools.jackson.databind.SerializationFeature
 import tools.jackson.databind.cfg.DateTimeFeature
+import tools.jackson.databind.cfg.EnumFeature
 import tools.jackson.databind.introspect.DefaultAccessorNamingStrategy
 import tools.jackson.databind.json.JsonMapper
 import tools.jackson.module.kotlin.kotlinModule
@@ -30,12 +31,14 @@ class JacksonConfig(@param:Property(name="digihot.cluster") val digitHotCluster:
         std.addValue("digihotCluster", digitHotCluster)
         event.bean
             .addModule(kotlinModule())
-            .changeDefaultPropertyInclusion{incl -> incl.withValueInclusion(JsonInclude.Include.ALWAYS)}
-            .changeDefaultPropertyInclusion{incl -> incl.withContentInclusion(JsonInclude.Include.ALWAYS)}
+            .changeDefaultPropertyInclusion{incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL)}
+            .changeDefaultPropertyInclusion{incl -> incl.withContentInclusion(JsonInclude.Include.NON_NULL)}
             .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
             .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .configure(EnumFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+            .configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false)
             .configure(SerializationFeature.INDENT_OUTPUT, false)
             .accessorNaming(DefaultAccessorNamingStrategy.Provider().withFirstCharAcceptance(true, true))
             .configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, false)
