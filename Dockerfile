@@ -1,6 +1,6 @@
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
-RUN apt-get update && apt-get install -y libjemalloc-dev && apt-get remove -y wget && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache jemalloc-dev
 ENV TZ="Europe/Oslo"
 EXPOSE 8080
 COPY build/libs/hm-grunndata-search-all.jar ./app.jar
