@@ -53,7 +53,7 @@ spec:
         - application: hm-grunndata-api
         - application: hm-kommune-api
         - application: hm-oversikt-frontend
-        - application: hm-oversikt-frontend-alpha
+        - application: hm-finnhjelpemiddel
         - application: hm-oebs-api-proxy
         - application: hm-saksbehandling
         - application: hm-soknad
