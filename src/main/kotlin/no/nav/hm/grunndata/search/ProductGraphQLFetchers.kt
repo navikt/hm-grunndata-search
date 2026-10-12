@@ -37,7 +37,8 @@ class ProductGraphQLFetchers(
             LOG.error("Exception caught and ignored while searching for products (graphql)", e)
         }.onSuccess {
             // LOG.info("Resultat: ${objectMapper.prettifyJson(it)}")
-        }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it, OpenSearchResponse::class.java) } ?: OpenSearchResponse.empty()
+        }.getOrNull()?.let { objectMapper.readValue<OpenSearchResponse>(it, OpenSearchResponse::class.java) }
+            ?: OpenSearchResponse.empty()
         return res.hits.hits.map { it.product }
     }
 }
@@ -50,7 +51,7 @@ private val hmsnrsSearchQuery = { hmsnrs: Set<String> ->
     """{"query": {"terms": {"hmsArtNr": [${hmsnrs.joinToString { """"$it"""" }}]}}, "size": $maxNumberOfResults}"""
 }
 
-data class OpenSearchResponse (
+data class OpenSearchResponse(
     val hits: OpenSearchResponseHits,
 ) {
     companion object {
@@ -58,34 +59,37 @@ data class OpenSearchResponse (
     }
 }
 
-data class OpenSearchResponseHits (
+data class OpenSearchResponseHits(
     val hits: List<OpenSearchResponseHit>,
 )
 
-data class OpenSearchResponseHit (
+data class OpenSearchResponseHit(
     @JsonAlias("_source")
     val product: Product,
 )
 
-data class Product (
+data class Product(
     val id: String,
     val supplier: ProductSupplier,
     val title: String,
     val articleName: String,
     val attributes: AttributesDoc,
     val status: ProductStatus,
-    val hmsArtNr: String?=null,
+    val hmsArtNr: String? = null,
     val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
+    val isoCategory22: String?,
     val isoCategoryTitle: String?,
+    val isoCategoryTitle22: String?,
     val isoCategoryTitleShort: String?,
     val isoCategoryText: String?,
+    val isoCategoryText22: String?,
     val isoCategoryTextShort: String?,
     val main: Boolean = true,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
-    val seriesId: String?=null,
+    val seriesId: String? = null,
     val data: List<TechData> = emptyList(),
     val media: List<MediaDoc> = emptyList(),
     val created: LocalDateTime,
@@ -97,48 +101,48 @@ data class Product (
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
     @JacksonInject("digihotCluster")
-    @JsonProperty(value= "digihotCluster", required=false)
-    val digihotCluster: String?=null
+    @JsonProperty(value = "digihotCluster", required = false)
+    val digihotCluster: String? = null
 ) {
     fun dataAsText(): String = data.joinToString { it.toString() }
 
     fun productURL(): String {
-       return when (digihotCluster) {
-           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
-           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/${seriesId}"
-           "localhost" -> "http://localhost:8080/produkt/${seriesId}"
-           else -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
-       }
+        return when (digihotCluster) {
+            "prod" -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
+            "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/${seriesId}"
+            "localhost" -> "http://localhost:8080/produkt/${seriesId}"
+            else -> "https://finnhjelpemiddel.nav.no/produkt/${seriesId}"
+        }
     }
 
     fun productVariantURL(): String {
-       return when (digihotCluster) {
-           "prod" -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
-           "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/hmsartnr/${hmsArtNr}"
-           "localhost" -> "http://localhost:8080/produkt/hmsartnr/${hmsArtNr}"
-           else -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
-       }
+        return when (digihotCluster) {
+            "prod" -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
+            "dev" -> "https://finnhjelpemiddel.intern.dev.nav.no/produkt/hmsartnr/${hmsArtNr}"
+            "localhost" -> "http://localhost:8080/produkt/hmsartnr/${hmsArtNr}"
+            else -> "https://finnhjelpemiddel.nav.no/produkt/hmsartnr/${hmsArtNr}"
+        }
     }
 }
 
 
 @Introspected
-data class AgreementInfoDoc (
+data class AgreementInfoDoc(
     val id: UUID,
-    val identifier: String?=null,
-    val title: String?=null,
+    val identifier: String? = null,
+    val title: String? = null,
     val label: String,
     val rank: Int,
     val postNr: Int,
-    val postIdentifier: String?=null,
-    val postTitle: String?=null,
+    val postIdentifier: String? = null,
+    val postTitle: String? = null,
     val postId: UUID? = null,
     val reference: String,
     val expired: LocalDateTime,
 )
 
 @Introspected
-data class AttributesDoc (
+data class AttributesDoc(
     val manufacturer: String? = null,
     val compatibleWith: CompatibleWith? = null,
     val keywords: List<String>? = null,
@@ -157,16 +161,16 @@ data class AttributesDoc (
 )
 
 @Introspected
-data class MediaDoc (
+data class MediaDoc(
     val uri: String,
     val priority: Int = 1,
     val type: MediaType = MediaType.IMAGE,
-    val text: String?=null,
+    val text: String? = null,
     val source: MediaSourceType = MediaSourceType.HMDB,
 )
 
 @Introspected
-data class TechDataFilters (
+data class TechDataFilters(
     val fyllmateriale: String?,
     val setebreddeMaksCM: Int?,
     val setebreddeMinCM: Int?,
@@ -194,6 +198,7 @@ data class ProductSupplier(
 @Introspected
 enum class ProductStatus {
     ACTIVE,
+
     @JsonEnumDefaultValue
     INACTIVE,
     DELETED,
@@ -205,6 +210,7 @@ enum class MediaSourceType {
     REGISTER,
     EXTERNALURL,
     IMPORT,
+
     @JsonEnumDefaultValue
     UNKNOWN,
 }
@@ -215,6 +221,7 @@ enum class MediaType {
     IMAGE,
     VIDEO,
     XLS,
+
     @JsonEnumDefaultValue
     OTHER,
 }
@@ -227,28 +234,28 @@ enum class Produkttype {
 }
 
 @Introspected
-data class PakrevdGodkjenningskurs (
+data class PakrevdGodkjenningskurs(
     val tittel: String,
     val isokode: String,
     val kursId: Int,
 )
 
 @Introspected
-data class TechData (
-    val key:    String,
-    val value:  String,
-    val unit:   String,
+data class TechData(
+    val key: String,
+    val value: String,
+    val unit: String,
 ) {
     override fun toString(): String = "$key ${value}${unit}".trim()
 }
 
 @Introspected
-data class CompatibleWith (
+data class CompatibleWith(
     val seriesIds: Set<UUID> = emptySet(),
 )
 
 @Introspected
-data class DocumentUrl (
+data class DocumentUrl(
     val url: String,
     val title: String,
 )
